@@ -4,7 +4,7 @@ defmodule Kovacs.Mixfile do
   def project do
     [ app: :kovacs,
       version: version,
-      elixir: "~> 0.14",
+      elixir: "~> 0.15",
       escript: escript,
       deps: deps,
       description: description,

@@ -3,6 +3,15 @@ defmodule Kovacs.Cli do
   @fswatch_path "./fswatch"
 
   def main(args) do
+    run(args)
+  end
+
+  def run([]) do
+    print_cmds
+    IO.puts "\r\n\e[31mMissing control file!\e[39m"
+  end
+
+  def run(args) do
     print_cmds
 
     case ensure_fswatch do

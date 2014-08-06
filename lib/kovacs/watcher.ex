@@ -45,7 +45,7 @@ defmodule Kovacs.Watcher do
         :ok
       port ->
         Port.close(port)
-        System.cmd("kill -9 #{pid}")
+        System.cmd("kill", ["#{pid}"], [])
     end
   end
 

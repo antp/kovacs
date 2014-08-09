@@ -23,7 +23,7 @@ kovacs can then be run in any directory by typing the following:
 If kovacs is run without a configuration file it will by default watch
 the __lib__ and __test__ directories.
 
-if you want to watch any custom directories then you will need to suply a confiuration file.
+if you want to watch any custom directories then you will need to supply a confiuration file.
 
 Create a Elixir configuration file e.g. kovacs.ex
 with the following contents.
@@ -36,7 +36,7 @@ with the following contents.
           end
         end
 
-This will watch both the "lib" and "test" directories from your project root,
+This will watch the __lib/dir1__, __lib/dir2__ and __test__ directories from your project root,
 for file changes.
 
 Add entries in the configure function to monitor any directories you require e.g.
@@ -50,7 +50,7 @@ Duplicate file changes will be detected if you do.
 
 Run kovacs with the following
 
-        kovacs kovacs.ex
+        kovacs {optional configuration file}
 
 The runner will look for a test file in the same directory structure as the tested file.
 

@@ -1,6 +1,6 @@
 defmodule Kovacs.Cli do
 
-  @fswatch_path "./fswatch"
+  @fswatch_path "/usr/local/bin/fswatch"
 
   def main(args) do
     run(args)

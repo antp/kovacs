@@ -9,6 +9,10 @@ defmodule Kovacs.Cli do
   def run([]) do
     print_cmds
     IO.puts "\r\n\e[31mMissing control file!\e[39m"
+    IO.puts "\r\nWatching default locations."
+    Kovacs.watch("lib")
+    Kovacs.watch("test")
+    run
   end
 
   def run(args) do

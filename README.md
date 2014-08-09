@@ -20,12 +20,18 @@ kovacs can then be run in any directory by typing the following:
 
 ## Configuration
 
+If kovacs is run without a configuration file it will by default watch
+the __lib__ and __test__ directories.
+
+if you want to watch any custom directories then you will need to suply a confiuration file.
+
 Create a Elixir configuration file e.g. kovacs.ex
 with the following contents.
 
         defmodule Kovacs.Cfg do
           def configure do
-            Kovacs.watch("lib")
+            Kovacs.watch("lib/dir1")
+            Kovacs.watch("lib/dir2")
             Kovacs.watch("test")
           end
         end

@@ -1,6 +1,6 @@
 defmodule Kovacs.Watcher do
 
-  @fswatch_path "./fswatch"
+  @fswatch_path "fswatch"
   @max_line_length_for_each_event 255
 
   def initialise(path) do

@@ -6,6 +6,7 @@ defmodule Kovacs.Watcher.Proc do
   end
 
   def create(dir_to_watch) do
+    IO.puts "Watching #{dir_to_watch}"
     {:ok, pid} = Kovacs.Watcher.Supervisor.create_child()
 
     :gen_server.call pid, {:watch, dir_to_watch}

@@ -2,7 +2,21 @@
 
 ## Installation
 
-Place the kovacs and fswatch executables in your Elixir applications root.
+Install the application into
+
+        /usr/local/bin
+
+The easest way to do this is to create a symbolic link to kovacs and fswatch files in
+the directory where you have downloaded the project too.
+
+        ln -s ~/{project path}/fswatch /usr/local/bin/fswatch
+        ln -s ~/{project path}/kovacs /usr/local/bin/kovacs
+
+You may not need to link fswatch if you have already installed it.
+
+kovacs can then be run in any directory by typing the following:
+
+        kovacs {config file}
 
 ## Configuration
 
@@ -30,7 +44,7 @@ Duplicate file changes will be detected if you do.
 
 Run kovacs with the following
 
-        ./kovacs kovacs.ex
+        kovacs kovacs.ex
 
 The runner will look for a test file in the same directory structure as the tested file.
 
@@ -40,7 +54,7 @@ If you have a file in:
 
 then it will expect a test file:
 
-        test/parser/filter_test.ex
+        test/parser/filter_test.exs
 
 __Important:__ When exiting the application press the 'q' key followed by carridge return.
 Do not exit kovacs with ctrl-c and aborting the VM. This will leave fswatch instancies running,
@@ -48,7 +62,7 @@ which you will need to manually clean up -- you have been warned.
 
 ## Author
 
-Copyright © 2014 Antony Pinchbeck
+Copyright © 2014 Component X Software, Antony Pinchbeck
 
 Released under Apache 2 License
 

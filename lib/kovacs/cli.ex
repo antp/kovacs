@@ -37,7 +37,8 @@ defmodule Kovacs.Cli do
   end
 
   defp print_cmds do
-    IO.puts "\r\n(Q)uit"
+    IO.puts "\r\n(I) toggle run integration test default: On"
+    IO.puts "(Q)uit"
 
     IO.puts "(H)elp - show this menu"
     IO.puts "\r\n\e[31mImportant:\e[39m Please use the q command to exit cleanly."
@@ -46,6 +47,7 @@ defmodule Kovacs.Cli do
 
   defp run() do
     raw_cmd = IO.gets('')
+    raw_cmd = String.downcase(raw_cmd)
 
     process_cmd(raw_cmd)
   end
@@ -54,6 +56,11 @@ defmodule Kovacs.Cli do
     # ensure all fswatch processes are terminated
     Kovacs.Watcher.Supervisor.unload_children
     IO.puts "Bye"
+  end
+
+  defp process_cmd("i\n") do
+    Kovacs.Runner.Proc.toggle_run_integration
+    run
   end
 
   defp process_cmd(_) do

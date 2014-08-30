@@ -2,34 +2,51 @@ defmodule Kovacs.Runner.Proc do
   use GenServer
 
   def start_link do
-    :gen_server.start_link({:local, __MODULE__ }, __MODULE__, Kovacs.Fifo.new, [])
+    :gen_server.start_link({:local, __MODULE__ }, __MODULE__, {true, Kovacs.Fifo.new}, [])
+  end
+
+  def toggle_run_integration() do
+    :gen_server.cast __MODULE__, :toggle_run_integration
   end
 
   def run_tests(modified_files) do
     :gen_server.cast __MODULE__, {:run_tests, modified_files}
   end
 
+  def handle_cast(:toggle_run_integration, {run_integration, fifo}) do
+    run_integration = case run_integration do
+      true ->
+        IO.puts "Integration tests OFF"
+        false
+      false ->
+        IO.puts "Integration tests ON"
+        true
+    end
 
-  def handle_cast({:run_tests, modified_files}, fifo) do
-    fifo = add_files_to_fifo(modified_files, fifo)
-    fifo = Kovacs.Runner.run_if_ready(fifo)
-    {:noreply, fifo}
+    {:noreply, {run_integration, fifo}}
   end
 
-  def handle_info({_active_port, {:data, {:noeol, msg}} }, fifo) do
+  def handle_cast({:run_tests, modified_files}, {run_integration, fifo}) do
+    fifo = add_files_to_fifo(modified_files, run_integration, fifo)
+    fifo = Kovacs.Runner.run_if_ready(fifo)
+
+    {:noreply, {run_integration, fifo}}
+  end
+
+  def handle_info({_active_port, {:data, {:noeol, msg}} }, {run_integration, fifo}) do
     :io.put_chars(msg)
 
-    {:noreply, fifo}
+    {:noreply, {run_integration, fifo}}
   end
 
-  def handle_info({_active_port, {:data, {:eol, msg}} }, fifo) do
+  def handle_info({_active_port, {:data, {:eol, msg}} }, {run_integration, fifo}) do
     :io.put_chars(msg)
     :io.put_chars("\n")
 
-    {:noreply, fifo}
+    {:noreply, {run_integration, fifo}}
   end
 
-  def handle_info({_active_port, {:exit_status, exit_status} }, fifo) do
+  def handle_info({_active_port, {:exit_status, exit_status} }, {run_integration, fifo}) do
     IO.puts "\r\n---------------------------\r\n"
 
     fifo = if 1 == exit_status do
@@ -39,12 +56,19 @@ defmodule Kovacs.Runner.Proc do
       Kovacs.Runner.run_if_ready(fifo)
     end
 
-    {:noreply, fifo}
+    {:noreply, {run_integration, fifo}}
   end
 
-  defp add_files_to_fifo(files, fifo) do
+  defp add_files_to_fifo(files, run_integration, fifo) do
     fifo = Enum.reduce(files, fifo, fn({file, _}, fifo) ->
       {state, fifo} = add_test_file(file, fifo)
+
+      # run integration only if requested
+      state = if run_integration do
+        state
+      else
+        false
+      end
 
       case state do
         :ok ->

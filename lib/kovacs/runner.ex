@@ -1,19 +1,27 @@
 defmodule Kovacs.Runner do
   def run_if_ready(fifo) do
     if Kovacs.Fifo.has_items?(fifo) do
-      {file, fifo} = Kovacs.Fifo.next(fifo)
+      {entry, fifo} = Kovacs.Fifo.next(fifo)
 
-      case Kovacs.Tasks.Run.run_file(file) do
-        {:error, msg} ->
-          IO.puts msg
-          IO.puts "\r\n---------------------------\r\n"
-        {:ok, file_to_run, msg} ->
-          IO.puts msg
-          Port.open({ :spawn, 'mix test #{file_to_run}' },
-            [:stderr_to_stdout, :in, :exit_status, :binary, :stream, { :line, 1 }])
-      end
+      run(entry)
+
+      fifo
+    else
+      fifo
     end
+  end
 
-    fifo
+  defp run({:file, file}) do
+    IO.puts "\e[34mRunning test file: #{file}\e[39m"
+
+    Port.open({ :spawn, 'mix test #{file}' },
+      [:stderr_to_stdout, :in, :exit_status, :binary, :stream, { :line, 1 }])
+  end
+
+  defp run({:integration, file}) do
+    IO.puts "\e[34mRunning integration test file: #{file}\e[39m"
+
+    Port.open({ :spawn, 'mix test #{file}' },
+      [:stderr_to_stdout, :in, :exit_status, :binary, :stream, { :line, 1 }])
   end
 end

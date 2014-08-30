@@ -8,33 +8,42 @@ defmodule Kovacs.Fifo.Test do
   test "it can have items added" do
     fifo = Kovacs.Fifo.new
 
-    fifo = Kovacs.Fifo.add(fifo, "item")
+    fifo = Kovacs.Fifo.add(fifo, {:ok, "item"})
 
-    assert ["item"] == fifo
+    assert [{:ok, "item"}] == fifo
   end
 
   test "it can have multiple items added" do
     fifo = Kovacs.Fifo.new
 
-    fifo = Kovacs.Fifo.add(fifo, "item1")
-    fifo = Kovacs.Fifo.add(fifo, "item2")
+    fifo = Kovacs.Fifo.add(fifo, {:ok, "item1"})
+    fifo = Kovacs.Fifo.add(fifo, {:ok, "item2"})
 
-    assert ["item2", "item1"] == fifo
+    assert [{:ok, "item2"}, {:ok, "item1"}] == fifo
+  end
+
+  test "it will not add the same item twice" do
+    fifo = Kovacs.Fifo.new
+
+    fifo = Kovacs.Fifo.add(fifo, {:ok, "item1"})
+    fifo = Kovacs.Fifo.add(fifo, {:ok, "item1"})
+
+    assert [{:ok, "item1"}] == fifo
   end
 
   test "it will return the item" do
     fifo = Kovacs.Fifo.new
 
-    fifo = Kovacs.Fifo.add(fifo, "item")
+    fifo = Kovacs.Fifo.add(fifo, {:ok, "item"})
     {item, _fifo} = Kovacs.Fifo.next(fifo)
 
-    assert "item" == item
+    assert {:ok, "item"} == item
   end
 
   test "it will remove the item" do
     fifo = Kovacs.Fifo.new
 
-    fifo = Kovacs.Fifo.add(fifo, "item")
+    fifo = Kovacs.Fifo.add(fifo, {:ok, "item"})
     {_item, fifo} = Kovacs.Fifo.next(fifo)
 
     assert [] == fifo

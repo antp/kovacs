@@ -4,8 +4,26 @@ defmodule Kovacs.Fifo do
   end
 
   def add(fifo, item) do
-    [item | fifo]
+    {_, file} = item
+
+    existing =  Enum.any?(fifo, fn(x) ->
+      {_, coll_file} = x
+
+      if file == coll_file do
+        true
+      else
+        false
+      end
+    end)
+
+    case existing do
+      true ->
+        fifo
+      false ->
+        [item | fifo]
+    end
   end
+
 
   def has_items?(fifo) do
     0 != length(fifo)

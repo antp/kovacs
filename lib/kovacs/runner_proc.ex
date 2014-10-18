@@ -34,6 +34,7 @@ defmodule Kovacs.Runner.Proc do
   end
 
   def handle_info({_active_port, {:data, {:noeol, msg}} }, {run_integration, fifo}) do
+
     :io.put_chars(msg)
 
     {:noreply, {run_integration, fifo}}
@@ -60,7 +61,7 @@ defmodule Kovacs.Runner.Proc do
   end
 
   defp add_files_to_fifo(files, run_integration, fifo) do
-    fifo = Enum.reduce(files, fifo, fn({file, _}, fifo) ->
+    Enum.reduce(files, fifo, fn({file, _}, fifo) ->
       {state, fifo} = add_test_file(file, fifo)
 
       # run integration only if requested

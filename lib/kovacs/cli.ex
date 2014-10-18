@@ -11,7 +11,7 @@ defmodule Kovacs.Cli do
     IO.puts "\r\nWatching default locations."
     Kovacs.watch("lib")
     Kovacs.watch("test")
-    run
+    do_run
   end
 
   def run(args) do
@@ -23,7 +23,7 @@ defmodule Kovacs.Cli do
           :ok ->
             Kovacs.Cfg.configure
             IO.puts "Watching..."
-            run
+            do_run
           :stop ->
             IO.puts "Exiting..."
           end
@@ -45,7 +45,7 @@ defmodule Kovacs.Cli do
     IO.puts "\r\n\r\n---------------------------\r\n"
   end
 
-  defp run() do
+  defp do_run() do
     raw_cmd = IO.gets('')
     raw_cmd = String.downcase(raw_cmd)
 
@@ -60,11 +60,10 @@ defmodule Kovacs.Cli do
 
   defp process_cmd("i\n") do
     Kovacs.Runner.Proc.toggle_run_integration
-    run
+    do_run
   end
 
   defp process_cmd(_) do
-    run
+    do_run
   end
-
 end

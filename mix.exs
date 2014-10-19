@@ -39,7 +39,7 @@ defp description do
     """
     Kovacs - A simple ExUnit test runner
 
-    It will monitor the file system and run test files when it dtects changes.
+    It will monitor the file system and run test files when it detects changes.
     """
   end
 

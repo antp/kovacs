@@ -46,6 +46,12 @@ It will also run an integration test file that has the same name as the director
 
 You can toggle the running of the integration file by entering the command 'i \<return\>'
 
+
+When running Kovacs, the coloured output from ExUnit will not be shown. If you want to have coloured output
+then update the projects test_helper.ex file to the following:
+
+        ExUnit.start([colors: [enabled: true]])
+
 ## Configuration
 
 if you want to watch any custom directories then you will need to supply a configuration file.

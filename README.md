@@ -2,6 +2,12 @@
 
 ## Installation
 
+Clone the repository.
+Build Kovacs
+
+    MIX_ENV=prod mix escript.build
+
+
 Install the application into a directory on your path
 
         /usr/local/bin

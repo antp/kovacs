@@ -1,4 +1,4 @@
-defmodule Get.File.To.Run.Test do
+defmodule Get.Integartion.File.To.Run.Test do
 	use ExUnit.Case
 
 

@@ -14,14 +14,14 @@ defmodule Kovacs.Runner do
   defp run({:file, file}) do
     IO.puts "\e[34mRunning test file: #{file}\e[39m"
 
-    Port.open({:spawn, 'mix test #{file}'},
+    Port.open({:spawn, 'mix test --exclude ignore --exclude pending #{file}'},
       [:stderr_to_stdout, :in, :exit_status, :binary, :stream, { :line, 1 }])
   end
 
   defp run({:integration, file}) do
     IO.puts "\e[34mRunning integration test file: #{file}\e[39m"
 
-    Port.open({:spawn, 'mix test #{file}'},
+    Port.open({:spawn, 'mix test --exclude ignore --exclude pending #{file}'},
       [:stderr_to_stdout, :in, :exit_status, :binary, :stream, { :line, 1 }])
   end
 end

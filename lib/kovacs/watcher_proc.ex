@@ -28,12 +28,13 @@ defmodule Kovacs.Watcher.Proc do
     {:reply, :ok, Kovacs.Watcher.Data.new}
   end
 
-  def handle_info({ active_port, _msg }, state) do
+  def handle_info({ active_port, {:data, {:eol, modified_file}} }, state) do
     on_changed_fn = fn(modified_files) ->
       Kovacs.Runner.Proc.run_tests(modified_files)
     end
 
-    state = Kovacs.Watcher.get_changed_files(active_port, state, on_changed_fn)
+    state = Kovacs.Watcher.get_changed_files(modified_file, active_port, state, on_changed_fn)
+
 
     {:noreply, state}
   end

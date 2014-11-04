@@ -9,8 +9,7 @@ defmodule Kovacs.Cli do
   def run([]) do
     print_cmds
     IO.puts "\r\nWatching default locations."
-    Kovacs.watch("lib")
-    Kovacs.watch("test")
+    Kovacs.watch(["./lib", "./test"])
     do_run
   end
 

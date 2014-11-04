@@ -1,7 +1,6 @@
 defmodule Kovacs.Cfg do
 
   def configure do
-    Kovacs.watch("lib")
-    Kovacs.watch("test")
+    Kovacs.watch(["./lib", "./test"])
   end
 end

@@ -1,17 +1,17 @@
 defmodule Kovacs.Watcher do
 
   @fswatch_path "fswatch"
-  @max_line_length_for_each_event 255
+  @max_line_length_for_each_event 2048
 
   def initialise(path) do
-    port = Port.open({ :spawn, '#{@fswatch_path} ./#{path} \'echo "file event"\'' },
+    paths = Enum.join(path, " ")
+
+    port = Port.open({ :spawn, '#{@fswatch_path} #{paths}' },
         [:stderr_to_stdout, :in, :exit_status, :binary, :stream, { :line, @max_line_length_for_each_event }])
 
     {:os_pid, pid} = Port.info(port, :os_pid)
 
-    files = Kovacs.Files.Finder.get_files(path)
-
-    Kovacs.Watcher.Data.create(port, pid, path, files)
+    Kovacs.Watcher.Data.create(port, pid, path)
   end
 
   def unload(state) do
@@ -21,22 +21,16 @@ defmodule Kovacs.Watcher do
     close_port(port, pid)
   end
 
-  def get_changed_files(active_port, state, on_changed_fn) do
+  def get_changed_files(modified_file, active_port, state, on_changed_fn) do
     port = Kovacs.Watcher.Data.port(state)
 
     if active_port == port do
-      path = Kovacs.Watcher.Data.path(state)
-
-      new_files = Kovacs.Files.Finder.get_files(path)
-
-      files = Kovacs.Watcher.Data.files(state)
-
-      modified_files = get_modified_files(new_files, files)
-
-      on_changed_fn.(modified_files)
+      if String.ends_with?(modified_file, [".ex", ".exs"]) do
+        on_changed_fn.(modified_file)
+      end
     end
 
-    Kovacs.Watcher.Data.update_files(state, new_files)
+    state
   end
 
   defp close_port(port, pid) do
@@ -46,17 +40,6 @@ defmodule Kovacs.Watcher do
       port ->
         Port.close(port)
         System.cmd("kill", ["#{pid}"], [])
-    end
-  end
-
-  defp get_modified_files(new_files, old_files) do
-    Enum.filter new_files, fn({ path, new_date }) ->
-      case List.keyfind(old_files, path, 0) do
-        nil ->
-          true
-        {_, old_date} ->
-          new_date != old_date
-      end
     end
   end
 end

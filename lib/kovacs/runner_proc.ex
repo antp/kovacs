@@ -50,8 +50,6 @@ defmodule Kovacs.Runner.Proc do
   end
 
   def handle_info({_active_port, {:exit_status, exit_status} }, {run_integration, fifo}) do
-    IO.puts "\r\n---------------------------\r\n"
-
     fifo = if @failed_test == exit_status do
       # failed test, so don't runn any others
       Kovacs.Fifo.new

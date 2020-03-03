@@ -9,12 +9,12 @@ Download the latest release (or clone) the repository and build Kovacs with:
 
 Install the application into a directory on your path
 
-        /usr/local/bin
+    /usr/local/bin
 
 The easiest way to do this is to create a symbolic link to kovacs in
 the directory where you have downloaded the project too.
 
-        ln -s ~/{project path}/kovacs /usr/local/bin/kovacs
+    ln -s ~/{project path}/kovacs /usr/local/bin/kovacs
 
 ## Dependencies
 
@@ -26,7 +26,7 @@ Please download fswatch for your OS from its [github repository](https://github.
 
 kovacs can then be run in any directory by typing the following:
 
-        kovacs
+    kovacs
 
 By default it will monitor the __lib__ and __test__ directories.
 
@@ -40,22 +40,26 @@ The runner will look for a test file in the same directory structure as the test
 
 If you have a file in:
 
-        lib/parser/filter.ex
+    lib/parser/filter.ex
 
 then it will expect the test file:
 
-        test/parser/filter_test.exs
+    test/parser/filter_test.exs
 
 When running Kovacs, the colour output from ExUnit will not be shown. If you want to have colour output then update the projects test_helper.ex file to the following:
 
-        ExUnit.start([colors: [enabled: true]])
+```elixir
+ExUnit.start([colors: [enabled: true]])
+```
 
 Kovacs will exclude any tests that are tagged with `@pending` or `@ignore`.
 
-        @tag :pending
-        test "It will add" do
-            assert 2 == 1 + 1
-        end
+```elixir
+@tag :pending
+test "It will add" do
+    assert 2 == 1 + 1
+end
+```
 
 ## Integration tests
 
@@ -72,11 +76,13 @@ if you want to watch any custom directories then you will need to supply a confi
 Create a Elixir configuration file e.g. kovacs.ex
 with the following contents.
 
-        defmodule Kovacs.Cfg do
-          def configure do
-            Kovacs.watch(["./lib/dir1", "./lib/dir2", "./test"])
-          end
-        end
+```elixir
+defmodule Kovacs.Cfg do
+  def configure do
+    Kovacs.watch(["./lib/dir1", "./lib/dir2", "./test"])
+  end
+end
+```
 
 This will watch the __lib/dir1__, __lib/dir2__ and __test__ directories from your project root,
 for file changes.
@@ -89,7 +95,7 @@ Duplicate file changes may be detected if you do.
 
 Run kovacs with the following
 
-        kovacs {optional configuration file}
+    kovacs {optional configuration file}
 
 
 
